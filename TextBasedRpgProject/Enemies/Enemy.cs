@@ -5,35 +5,52 @@ using System.Text;
 namespace TextBasedRpgProject.Enemies
 {
     public abstract class Enemy
-
     {
+        Random rand = new Random();
         public bool Dead;
         private int hp;
         private int damage;
-        private int xp;
-        private int gold;
+        private int xp;       
         private int maxHp;
 
         public string Name { get; set; }
-        public int Hp { get => hp; set => hp = value; }
+        public int Hp
+
+        {
+            get
+            {
+                return hp;
+            }
+            set
+            {
+                if (value>0)
+                {
+                    hp = value;
+                }
+                else
+                {
+                    hp = 0;
+                }
+            }
+        }
+
         public int Damage { get => damage; set => damage = value; }
-        public int Xp { get => xp; set => xp = value; }
-        public int Gold { get => gold; set => gold = value; }
+        public int Xp { get => xp; set => xp = value; }        
         public int MaxHp { get => maxHp; set => maxHp = value; }
 
-        
+
 
         protected Enemy()
         {
         }
         public virtual void Heal()
         {
-            hp+=maxHp;
+            hp += maxHp;
         }
 
         public virtual int Attack(Player player)
         {
-            player.TakeDamage(damage);
+            player.TakeDamage(rand.Next(10,20)*player.level);
             return damage;
         }
 
@@ -59,6 +76,6 @@ namespace TextBasedRpgProject.Enemies
         public void TakeDamage(int damage)
         {
             this.Hp -= damage;
-        }     
+        }
     }
 }

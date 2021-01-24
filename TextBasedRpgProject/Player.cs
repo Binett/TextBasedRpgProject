@@ -1,34 +1,50 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using TextBasedRpgProject.Enemies;
 
 namespace TextBasedRpgProject
 {
     public class Player
     {
-        static Random rand = new Random();
-        public int gold;
-        public string name;
-        public int maxHp =200;
-        public int coins=0;
-       
-
-        public int level { get; set; } = 1;
-        public int Hp { get; set; }        
-        public int Xp { get; set; } = 0;
-        public int Damage { get; set; } = rand.Next(20,50);
-        public int Gold { get; set; }
+        static Random rand = new Random(); 
         
+        public string name;
+        public int maxHp;
+        public int damage;
+        public int level = 1;
+        public int hp;
+        public int xp = 0;
+
+        public int Level { get; set; } = 1;        
+        public int Hp 
+        {
+            get
+            {
+                return hp;
+            }
+            set
+            {
+                if (value > 0)
+                {
+                    hp = value;
+                }
+                else
+                {
+                     hp = 0;
+                }
+            }
+        }
+        public int Xp { get; set; }
+        public int Damage { get; set; }
+        public int Gold { get; set; }
 
         public int GetGold()
         {
-            coins += rand.Next(30, 50)*level;
-            return coins;
+            return rand.Next(30, 50)*level;
+            
         }
         public int Attack(Enemy enemy)
         {
-            enemy.TakeDamage(Damage);
+            enemy.TakeDamage(rand.Next(20,40));
             return Damage;
         }
         public void TakeDamage(int enemyDamage)
@@ -37,11 +53,9 @@ namespace TextBasedRpgProject
         }
         public override string ToString()
         {
-            return $"Name: {name}\n" +
-                $"HP: {Hp}\n" +
-                $"XP: {Xp}\n" +
+            return $"Name: {name}\n" +                
                 $"Level: {level}\n" +
-                $"Gold: {coins}";
+                $"Gold: {Gold}";
         }
         public int XpToLevel()
         {
@@ -73,7 +87,8 @@ namespace TextBasedRpgProject
         }
         public void MaxHp()
         {
-            Hp = (maxHp * level);
+            maxHp = 200*level;
+            Hp = maxHp;
         }
     }
 }

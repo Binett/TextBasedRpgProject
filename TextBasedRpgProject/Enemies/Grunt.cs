@@ -9,9 +9,8 @@ namespace TextBasedRpgProject.Enemies
     {
         public Grunt()
         {
-            base.Name = "Wizze";
-            base.Hp = 100;
-            base.Gold = 100;
+            base.Name = "Gurgel";
+            base.Hp = 100;            
             base.Damage = 5;
             base.Dead = false;
             base.MaxHp = 100;

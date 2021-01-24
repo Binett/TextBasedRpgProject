@@ -12,10 +12,9 @@ namespace TextBasedRpgProject.Enemies
         
         public Wizard()
         {
-            base.Name = "Wizze";
-            base.Hp = 100;
-            base.Gold = 100;
-            base.Damage = 5;
+            base.Name = "Aja visst";
+            base.Hp = 100;            
+            base.Damage = 0;
             base.Dead = false;
             base.MaxHp=100;
         }
@@ -25,16 +24,21 @@ namespace TextBasedRpgProject.Enemies
             return base.Alive();
         }
 
+        public override int Attack(Player player)
+        {
+            return base.Attack(player);
+        }
+
         public override int GiveXp()
         {
             return base.GiveXp();
         }
 
-        public override string ToString()
+        public override void Heal()
         {
-            return base.ToString();
+            base.Heal();
         }
-    }
 
 
+    }    
 }

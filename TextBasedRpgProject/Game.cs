@@ -1,22 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Runtime.InteropServices;
 using System.Threading;
 using TextBasedRpgProject.Enemies;
 
 namespace TextBasedRpgProject
 {
     class Game
-    {        
+    {
         List<Enemy> listOfEnemies = new List<Enemy>();
         Player player = new Player();
-        
+
+        /*|-----------------------------------------------------------------------------------------------------------------------------------------------------|
+         *|---------------------------------------------------------> Start up the game <-----------------------------------------------------------------------|
+         *|-----------------------------------------------------------------------------------------------------------------------------------------------------|*/
+
         public void StartGame()
         {
+            Console.Title = "Magic Mayhem";
             SetupGame();
-            Console.WriteLine("***********************");
-            Console.WriteLine("*   Hells Dungeouns   *");
-            Console.WriteLine("***********************");
+            Logo();
             Console.Write("Enter your Name:");
             Console.ForegroundColor = ConsoleColor.Green;
             player.name = Console.ReadLine();
@@ -50,15 +52,21 @@ namespace TextBasedRpgProject
             }
         }
 
+        /*|-----------------------------------------------------------------------------------------------------------------------------------------------------|
+         *|-------------------------------------------------> objects of the enemies <--------------------------------------------------------------------------|
+         *|-----------------------------------------------------------------------------------------------------------------------------------------------------|*/
+
         private void SetupGame()
         {
             Grunt micke = new Grunt();
-            Wizard kalle = new Wizard();
             Wizard jonas = new Wizard();
-            listOfEnemies.Add(kalle);
             listOfEnemies.Add(jonas);
             listOfEnemies.Add(micke);
         }
+
+        /*|-----------------------------------------------------------------------------------------------------------------------------------------------------|
+         *|-----------------------------------> Battle or flee method, 10 percents chance of not fighting <-----------------------------------------------------|
+         *|-----------------------------------------------------------------------------------------------------------------------------------------------------|*/
 
         private void GoAdventure()
         {
@@ -71,27 +79,74 @@ namespace TextBasedRpgProject
             else
             {
                 int value = rand.Next(listOfEnemies.Count);
-                Battle(listOfEnemies[value]);
+                Battle(listOfEnemies[value], player);
             }
         }
 
-        private void Battle(Enemy enemy)
+        /*|-----------------------------------------------------------------------------------------------------------------------------------------------------|
+         *|-----------------------------------------------> Encounters for the battles <------------------------------------------------------------------------|
+         *|-----------------------------------------------------------------------------------------------------------------------------------------------------|*/
+
+        private void Battle(Enemy enemy, Player player)
         {
-            Console.WriteLine("You see a wild " + enemy.Name + " Lurking in the shadows, you raise your blade ready to charge the enemy!");
+            Utilitys.PrintRed("You see a wild " + enemy.Name + " Lurking in the shadows, you raise your blade ready to charge the enemy!\n");
+            Utilitys.PrintRed(@"  			,---.
+                       /    |
+                      /     |
+
+                   /      |
+                    /       |
+               ___, '        |
+             < -'          :
+              `-.__..--'``-,_\_
+                 | o / ` :,.)_`>
+                 :/ `     ||/)
+                 (_.).__,-` |\
+                 / ( `.``   `| :
+                 \'`-.)  `  ; ;
+                 | `       / -<
+                 |     `  /   `.
+ ,-_ - ..____ /|  `    :__..-'\
+
+/,'-.__\\  ``-./ :`      ;       \
+`\ `\  `\\  \ :  (   `  /  ,   `. \
+  \` \   \\   |  | `   :  :     .\ \
+   \ `\_  ))  :  ;     |  |      ): :
+  (`-.- '\ ||  |\ \   ` ;  ;       | |
+   \-_   `; ;._( `  /  / _ | |
+     `-.-.// ,'`-._\__/_,'         ; |
+       \:: :     /     `     ,   /  |
+ 
+         || | (        , ' /   /   |
+         ||                , '   /    |");
+
+            Console.WriteLine("[Press enter to continue]");
             Console.ReadKey();
+            Console.Clear();
             while (enemy.Alive())
-            {            
-                Console.Clear();
-                Utilitys.PrintGreen($"Your HP:    {player.Hp}");
-                Utilitys.PrintRed($"Enemies HP: {enemy.Hp}");               
-                Utilitys.PrintGreen("You slash your sword at " + enemy.Name + " dealing " + player.Attack(enemy) + " damage");
-                Utilitys.PrintGreen(enemy.Name + " hp is now " + enemy.Hp);
+            {
+                Utilitys.PrintRed(@"██████╗  █████╗ ████████╗████████╗██╗     ███████╗
+██╔══██╗██╔══██╗╚══██╔══╝╚══██╔══╝██║     ██╔════╝
+██████╔╝███████║   ██║      ██║   ██║     █████╗  
+██╔══██╗██╔══██║   ██║      ██║   ██║     ██╔══╝  
+██████╔╝██║  ██║   ██║      ██║   ███████╗███████╗
+╚═════╝ ╚═╝  ╚═╝   ╚═╝      ╚═╝   ╚══════╝╚══════╝
+");
+                Utilitys.PrintGreen($"You slash your sword at {enemy.Name} dealing {player.Attack(enemy)} damage\n");
+                Utilitys.PrintRed($"The {enemy.Name} strikes you for {enemy.Attack(player)}\n");
+                ShowBattle(enemy, player);
+                Console.WriteLine("[Press enter to continue]");
+                Console.ReadKey();
                 if (!enemy.Alive())
                 {
-                    Console.WriteLine(enemy.Name + " is defeated you gain " + enemy.GiveXp() + " XP" + $" and {player.GetGold()} gold");
-                    player.GetGold();
-                    player.Xp += enemy.Xp;                    
+                    player.Gold += player.GetGold();
+                    Utilitys.PrintGreen($"{enemy.Name} is defeated, you gain {enemy.GiveXp() * player.level} XP and {player.GetGold()} gold");
+                    player.Xp += enemy.Xp * player.level;
                     enemy.Heal();
+                    Console.WriteLine("[Press enter to continue]");
+                    Console.ReadKey();
+                    Console.Clear();
+
                     if (player.CanLevelUp())
                     {
                         player.Hp = 0;
@@ -99,11 +154,12 @@ namespace TextBasedRpgProject
                         player.MaxHp();
                     }
                     return;
-                } 
-                if (player.level == 10)
+                }
+                if (player.level >= 10)
                 {
-                    Console.WriteLine($"You are now level 10, you have {player.Xp} XP and {player.Hp}\n\n Congratulations! You won the game :)");
+                    Console.WriteLine($"You are now level 10, you have {player.Xp} XP and {player.Hp}\n Congratulations! You won the game :)");
                     Console.ReadKey();
+                    Environment.Exit(0);
                 }
                 else if (player.Hp <= 0)
                 {
@@ -111,32 +167,79 @@ namespace TextBasedRpgProject
                     Thread.Sleep(1500);
                     Environment.Exit(0);
                 }
-                Utilitys.PrintRed("The " + enemy.Name + " strikes you for " + enemy.Attack(player));
-                Utilitys.PrintRed("Your hp is now " + player.Hp);
-                Console.WriteLine("[Press enter to continue]");
-                Console.ReadKey();
+                Console.Clear();
             }
             Console.ReadKey();
-            
+
         }
+
+        /*|------------------------------------------------------------------------------------------------------------------------------------------------------|
+         *|------------------------------------------------> Player and Enemy healthbars <-----------------------------------------------------------------------|
+         *|------------------------------------------------------------------------------------------------------------------------------------------------------|*/
+
+        private void ShowBattle(Enemy enemy, Player player)
+        {
+            Console.WriteLine($"Your health\t\t\tHP:{player.Hp}/{player.maxHp}");
+            Utilitys.HealtBar(player, (decimal)player.Hp / (decimal)player.maxHp, 40);
+            Console.WriteLine($"Enemies health\t\t\tHP:{enemy.Hp}/{enemy.MaxHp}");
+            Utilitys.HealtBar(enemy, (decimal)enemy.Hp / (decimal)enemy.MaxHp, 40);
+        }
+
+        /*|-----------------------------------------------------------------------------------------------------------------------------------------------------|
+         *|-----------------------------------------------> Show details about the player <---------------------------------------------------------------------|
+         *|-----------------------------------------------------------------------------------------------------------------------------------------------------|*/
 
         private void PlayerStats()
         {
-            Console.WriteLine();
+
+            Logo();
             Console.WriteLine(player.ToString());
+            Console.WriteLine($"Your health\t\t\tHP:{player.Hp}/{player.maxHp}");
+            Utilitys.HealtBar(player, (decimal)player.Hp / (decimal)player.maxHp, 40);
+            Utilitys.ProgressBar(player, (decimal)player.Xp / (decimal)player.XpToLevel(), 40);
             Console.ReadKey();
+            Console.Clear();
         }
+
+        /*|-----------------------------------------------------------------------------------------------------------------------------------------------------|
+         *|------------------------------------------------------> Go shopping :) <-----------------------------------------------------------------------------|
+         *|-----------------------------------------------------------------------------------------------------------------------------------------------------|*/
+
         private void GoToShop()
         {
 
         }
+
+        /*------------------------------------------------------------------------------------------------------------------------------------------------------|
+         * -----------------------------------* Show menu and call the progressbar from the utility class  *----------------------------------------------------|
+         * -----------------------------------------------------------------------------------------------------------------------------------------------------|*/
+
         private void PrintMenu()
         {
+            Logo();
+            Console.WriteLine();
             Console.WriteLine("1. Go adventuring");
             Console.WriteLine("2. Show details about your character");
             Console.WriteLine("3. Shop");
-            Console.WriteLine("4. Exit game");
+            Console.WriteLine("4. Exit game\n");
+            Utilitys.ProgressBar(player, (decimal)player.Xp / (decimal)player.XpToLevel(), 40);
+            Console.WriteLine($"Current HP:\t\t {player.hp}/{player.maxHp}");
+            Utilitys.HealtBar(player, (decimal)player.hp / (decimal)player.maxHp, 40);
         }
+
+        private void Logo()
+        {
+            Console.WriteLine();
+            Utilitys.PrintYellow(@"███╗   ███╗ █████╗  ██████╗ ██╗ ██████╗    ███╗   ███╗ █████╗ ██╗   ██╗██╗  ██╗███████╗███╗   ███╗
+████╗ ████║██╔══██╗██╔════╝ ██║██╔════╝    ████╗ ████║██╔══██╗╚██╗ ██╔╝██║  ██║██╔════╝████╗ ████║
+██╔████╔██║███████║██║  ███╗██║██║         ██╔████╔██║███████║ ╚████╔╝ ███████║█████╗  ██╔████╔██║
+██║╚██╔╝██║██╔══██║██║   ██║██║██║         ██║╚██╔╝██║██╔══██║  ╚██╔╝  ██╔══██║██╔══╝  ██║╚██╔╝██║
+██║ ╚═╝ ██║██║  ██║╚██████╔╝██║╚██████╗    ██║ ╚═╝ ██║██║  ██║   ██║   ██║  ██║███████╗██║ ╚═╝ ██║
+╚═╝     ╚═╝╚═╝  ╚═╝ ╚═════╝ ╚═╝ ╚═════╝    ╚═╝     ╚═╝╚═╝  ╚═╝   ╚═╝   ╚═╝  ╚═╝╚══════╝╚═╝     ╚═╝
+");
+
+        }
+
 
     }
 }
