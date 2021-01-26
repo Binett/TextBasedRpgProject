@@ -1,20 +1,25 @@
 ﻿using System;
+using System.Threading;
 using TextBasedRpgProject.Enemies;
 
 namespace TextBasedRpgProject
 {
     public class Player
     {
-        static Random rand = new Random(); 
+        static Random rand = new Random();
         
-        public string name;
-        public int maxHp;
-        public int damage;
-        public int level = 1;
-        public int hp;
-        public int xp = 0;
+        private string name;
+        private int maxHp=250;
+        private int damage;
+        private int level = 1;
+        public int hp = 200;
+        private int xp = 0;
+        private int armorValue=0;
+        private int weaponValue=0;
+        private int potions = 0;
+        private int potionValue = 100;
 
-        public int Level { get; set; } = 1;        
+
         public int Hp 
         {
             get
@@ -32,34 +37,37 @@ namespace TextBasedRpgProject
                      hp = 0;
                 }
             }
-        }
-        public int Xp { get; set; }
-        public int Damage { get; set; }
+        }        
         public int Gold { get; set; }
+        public int Damage { get => damage; set => damage = value; }
+        public int MaxHp { get => maxHp; set => maxHp = value; } 
+        public string Name { get => name; set => name = value; }
+        public int Xp { get => xp; set => xp = value; }
+        public int Level { get => level; set => level = value; }
+        public int ArmorValue { get => armorValue; set => armorValue = value; }       
+        public int WeaponValue { get => weaponValue; set => weaponValue = value; }
+        public int Potions { get => potions; set => potions = value; }
 
-        public int GetGold()
+
+        public int Attack()
         {
-            return rand.Next(30, 50)*level;
-            
-        }
-        public int Attack(Enemy enemy)
-        {
-            enemy.TakeDamage(rand.Next(20,40));
+            Damage = rand.Next(20, 30);
             return Damage;
         }
-        public void TakeDamage(int enemyDamage)
+        public int GetGold()
         {
-            this.Hp -= enemyDamage*level;
-        }
+            return rand.Next(30, 50)*Level;            
+        }       
         public override string ToString()
         {
-            return $"Name: {name}\n" +                
-                $"Level: {level}\n" +
-                $"Gold: {Gold}";
+            return $"Name: {Name}\n" +
+                $"Level: {Level}\n" +
+                $"Gold: {Gold}\n" +
+                $"Potions {Potions}";
         }
         public int XpToLevel()
         {
-            return  level * 100;
+            return 100 *  Level +400;
         }
         public bool CanLevelUp()
         {
@@ -77,18 +85,32 @@ namespace TextBasedRpgProject
             while (CanLevelUp())
             {
                 Xp -= XpToLevel();
-                maxHp += Hp * level;
-                level++;
+                MaxHp += Hp * Level;
+                Level++;
             }
             Console.Clear();
             Console.ForegroundColor = ConsoleColor.DarkCyan;
-            Utilitys.PrintGreen("Congratulations you've now reached " + level + " !");
+            Utilitys.PrintGreen("Congratulations you've now reached " + Level + " !");
             Console.ResetColor();
         }
-        public void MaxHp()
+        public void MaxHpPlayer()
         {
-            maxHp = 200*level;
-            Hp = maxHp;
+            maxHp = 200*Level;
+            Hp = MaxHp;
+        }
+        public void Heal(Player player)
+        {
+            if (player.potions == 0)
+            {
+                Console.WriteLine("You dont have any potions");
+                Thread.Sleep(2000);          
+            }
+            else
+            {
+                hp += potionValue;
+                potions--;
+            }          
+                
         }
     }
 }

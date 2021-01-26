@@ -5,16 +5,15 @@ using System.Windows.Markup;
 
 namespace TextBasedRpgProject.Enemies
 {
-    internal class Wizard : Enemy
+    public class Wizard : Enemy
     {
         
         Random rand = new Random();
         
         public Wizard()
         {
-            base.Name = "Aja visst";
-            base.Hp = 100;            
-            base.Damage = 0;
+            base.Name = "Aja vist";
+            base.Hp = 100;        
             base.Dead = false;
             base.MaxHp=100;
         }
@@ -22,11 +21,6 @@ namespace TextBasedRpgProject.Enemies
         public override bool Alive()
         {
             return base.Alive();
-        }
-
-        public override int Attack(Player player)
-        {
-            return base.Attack(player);
         }
 
         public override int GiveXp()
@@ -39,6 +33,9 @@ namespace TextBasedRpgProject.Enemies
             base.Heal();
         }
 
-
+        public override void ShowChar()
+        {
+            Utilitys.LogoWizard();
+        }
     }    
 }

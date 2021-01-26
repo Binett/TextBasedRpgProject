@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading;
 using TextBasedRpgProject.Enemies;
 
+
 namespace TextBasedRpgProject
 {
     class Game
@@ -18,13 +19,13 @@ namespace TextBasedRpgProject
         {
             Console.Title = "Magic Mayhem";
             SetupGame();
-            Logo();
+            Utilitys.MainLogo();
             Console.Write("Enter your Name:");
             Console.ForegroundColor = ConsoleColor.Green;
-            player.name = Console.ReadLine();
-            if (player.level == 1)
+            player.Name = Console.ReadLine();
+            if (player.Level == 1)
             {
-                player.MaxHp();
+                player.MaxHpPlayer();
             }
             Console.ResetColor();
             Console.Clear();
@@ -46,6 +47,8 @@ namespace TextBasedRpgProject
                         GoToShop();
                         break;
                     case '4':
+                        Utilitys.PrintGreen("Thanks for playing, please come again!!!");
+                        Console.WriteLine();
                         Environment.Exit(0);
                         break;
                 }
@@ -87,44 +90,18 @@ namespace TextBasedRpgProject
          *|-----------------------------------------------> Encounters for the battles <------------------------------------------------------------------------|
          *|-----------------------------------------------------------------------------------------------------------------------------------------------------|*/
 
+
         private void Battle(Enemy enemy, Player player)
         {
             Utilitys.PrintRed("You see a wild " + enemy.Name + " Lurking in the shadows, you raise your blade ready to charge the enemy!\n");
-            Utilitys.PrintRed(@"  			,---.
-                       /    |
-                      /     |
-
-                   /      |
-                    /       |
-               ___, '        |
-             < -'          :
-              `-.__..--'``-,_\_
-                 | o / ` :,.)_`>
-                 :/ `     ||/)
-                 (_.).__,-` |\
-                 / ( `.``   `| :
-                 \'`-.)  `  ; ;
-                 | `       / -<
-                 |     `  /   `.
- ,-_ - ..____ /|  `    :__..-'\
-
-/,'-.__\\  ``-./ :`      ;       \
-`\ `\  `\\  \ :  (   `  /  ,   `. \
-  \` \   \\   |  | `   :  :     .\ \
-   \ `\_  ))  :  ;     |  |      ): :
-  (`-.- '\ ||  |\ \   ` ;  ;       | |
-   \-_   `; ;._( `  /  / _ | |
-     `-.-.// ,'`-._\__/_,'         ; |
-       \:: :     /     `     ,   /  |
- 
-         || | (        , ' /   /   |
-         ||                , '   /    |");
-
+            enemy.ShowChar();
             Console.WriteLine("[Press enter to continue]");
             Console.ReadKey();
             Console.Clear();
+
             while (enemy.Alive())
             {
+
                 Utilitys.PrintRed(@"██████╗  █████╗ ████████╗████████╗██╗     ███████╗
 ██╔══██╗██╔══██╗╚══██╔══╝╚══██╔══╝██║     ██╔════╝
 ██████╔╝███████║   ██║      ██║   ██║     █████╗  
@@ -132,16 +109,25 @@ namespace TextBasedRpgProject
 ██████╔╝██║  ██║   ██║      ██║   ███████╗███████╗
 ╚═════╝ ╚═╝  ╚═╝   ╚═╝      ╚═╝   ╚══════╝╚══════╝
 ");
-                Utilitys.PrintGreen($"You slash your sword at {enemy.Name} dealing {player.Attack(enemy)} damage\n");
-                Utilitys.PrintRed($"The {enemy.Name} strikes you for {enemy.Attack(player)}\n");
+                enemy.Hp -= player.Attack();
+                player.Hp -= enemy.Attack();
+                Utilitys.PrintGreen($"You slash your sword at {enemy.Name} For {player.Damage} dmg!");
+                Utilitys.PrintRed($"{enemy.Name} hits {player.Name} for {enemy.Damage} dmg!");
                 ShowBattle(enemy, player);
-                Console.WriteLine("[Press enter to continue]");
-                Console.ReadKey();
+                Utilitys.PrintYellow("(H)eal");
+                Console.Write("[Press enter to continue]");
+                char input = Console.ReadKey().KeyChar;
+                if (input == 'h')
+                {
+                    player.Heal(player);
+                }
+
+
                 if (!enemy.Alive())
                 {
                     player.Gold += player.GetGold();
-                    Utilitys.PrintGreen($"{enemy.Name} is defeated, you gain {enemy.GiveXp() * player.level} XP and {player.GetGold()} gold");
-                    player.Xp += enemy.Xp * player.level;
+                    Utilitys.PrintGreen($"{enemy.Name} is defeated, you gain {enemy.GiveXp() * player.Level} XP and {player.GetGold()} gold");
+                    player.Xp += enemy.Xp * player.Level;
                     enemy.Heal();
                     Console.WriteLine("[Press enter to continue]");
                     Console.ReadKey();
@@ -151,26 +137,28 @@ namespace TextBasedRpgProject
                     {
                         player.Hp = 0;
                         player.LevelUp();
-                        player.MaxHp();
+                        player.MaxHpPlayer();
+                    }
+                    if (player.Level >= 10)
+                    {
+                        Console.WriteLine($"You are now level 10, you have {player.Xp} XP and {player.Hp}\n Congratulations! You won the game :)");
+                        Console.ReadKey();
+                        Environment.Exit(0);
                     }
                     return;
-                }
-                if (player.level >= 10)
-                {
-                    Console.WriteLine($"You are now level 10, you have {player.Xp} XP and {player.Hp}\n Congratulations! You won the game :)");
-                    Console.ReadKey();
-                    Environment.Exit(0);
+
                 }
                 else if (player.Hp <= 0)
                 {
+                    Console.Clear();
                     Console.WriteLine("You are dead ");
                     Thread.Sleep(1500);
                     Environment.Exit(0);
                 }
                 Console.Clear();
             }
-            Console.ReadKey();
 
+            Console.ReadKey();
         }
 
         /*|------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -179,8 +167,8 @@ namespace TextBasedRpgProject
 
         private void ShowBattle(Enemy enemy, Player player)
         {
-            Console.WriteLine($"Your health\t\t\tHP:{player.Hp}/{player.maxHp}");
-            Utilitys.HealtBar(player, (decimal)player.Hp / (decimal)player.maxHp, 40);
+            Console.WriteLine($"Your health\t\t\tHP:{player.Hp}/{player.MaxHp}");
+            Utilitys.HealtBar(player, (decimal)player.Hp / (decimal)player.MaxHp, 40);
             Console.WriteLine($"Enemies health\t\t\tHP:{enemy.Hp}/{enemy.MaxHp}");
             Utilitys.HealtBar(enemy, (decimal)enemy.Hp / (decimal)enemy.MaxHp, 40);
         }
@@ -192,10 +180,10 @@ namespace TextBasedRpgProject
         private void PlayerStats()
         {
 
-            Logo();
+            Utilitys.MainLogo();
             Console.WriteLine(player.ToString());
-            Console.WriteLine($"Your health\t\t\tHP:{player.Hp}/{player.maxHp}");
-            Utilitys.HealtBar(player, (decimal)player.Hp / (decimal)player.maxHp, 40);
+            Console.WriteLine($"Your health\t\t\tHP:{player.Hp}/{player.MaxHp}");
+            Utilitys.HealtBar(player, (decimal)player.Hp / (decimal)player.MaxHp, 40);
             Utilitys.ProgressBar(player, (decimal)player.Xp / (decimal)player.XpToLevel(), 40);
             Console.ReadKey();
             Console.Clear();
@@ -207,37 +195,24 @@ namespace TextBasedRpgProject
 
         private void GoToShop()
         {
-
+            Shop.LoadShop(player);
         }
 
         /*------------------------------------------------------------------------------------------------------------------------------------------------------|
-         * -----------------------------------* Show menu and call the progressbar from the utility class  *----------------------------------------------------|
+         * ---------------------------* Show menu and call the progressbar and health bar from the utility class  *---------------------------------------------|
          * -----------------------------------------------------------------------------------------------------------------------------------------------------|*/
 
         private void PrintMenu()
         {
-            Logo();
+            Utilitys.MainLogo();
             Console.WriteLine();
             Console.WriteLine("1. Go adventuring");
             Console.WriteLine("2. Show details about your character");
             Console.WriteLine("3. Shop");
             Console.WriteLine("4. Exit game\n");
             Utilitys.ProgressBar(player, (decimal)player.Xp / (decimal)player.XpToLevel(), 40);
-            Console.WriteLine($"Current HP:\t\t {player.hp}/{player.maxHp}");
-            Utilitys.HealtBar(player, (decimal)player.hp / (decimal)player.maxHp, 40);
-        }
-
-        private void Logo()
-        {
-            Console.WriteLine();
-            Utilitys.PrintYellow(@"███╗   ███╗ █████╗  ██████╗ ██╗ ██████╗    ███╗   ███╗ █████╗ ██╗   ██╗██╗  ██╗███████╗███╗   ███╗
-████╗ ████║██╔══██╗██╔════╝ ██║██╔════╝    ████╗ ████║██╔══██╗╚██╗ ██╔╝██║  ██║██╔════╝████╗ ████║
-██╔████╔██║███████║██║  ███╗██║██║         ██╔████╔██║███████║ ╚████╔╝ ███████║█████╗  ██╔████╔██║
-██║╚██╔╝██║██╔══██║██║   ██║██║██║         ██║╚██╔╝██║██╔══██║  ╚██╔╝  ██╔══██║██╔══╝  ██║╚██╔╝██║
-██║ ╚═╝ ██║██║  ██║╚██████╔╝██║╚██████╗    ██║ ╚═╝ ██║██║  ██║   ██║   ██║  ██║███████╗██║ ╚═╝ ██║
-╚═╝     ╚═╝╚═╝  ╚═╝ ╚═════╝ ╚═╝ ╚═════╝    ╚═╝     ╚═╝╚═╝  ╚═╝   ╚═╝   ╚═╝  ╚═╝╚══════╝╚═╝     ╚═╝
-");
-
+            Console.WriteLine($"Current HP:\t\t {player.Hp}/{player.MaxHp}");
+            Utilitys.HealtBar(player, (decimal)player.Hp / (decimal)player.MaxHp, 40);
         }
 
 

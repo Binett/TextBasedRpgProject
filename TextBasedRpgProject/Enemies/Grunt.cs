@@ -11,7 +11,6 @@ namespace TextBasedRpgProject.Enemies
         {
             base.Name = "Gurgel";
             base.Hp = 100;            
-            base.Damage = 5;
             base.Dead = false;
             base.MaxHp = 100;
         }
@@ -21,10 +20,7 @@ namespace TextBasedRpgProject.Enemies
             return base.Alive();
         }
 
-        public override int Attack(Player player)
-        {
-            return base.Attack(player);
-        }
+
 
         public override int GiveXp()
         {
@@ -39,6 +35,11 @@ namespace TextBasedRpgProject.Enemies
         public override string ToString()
         {
             return base.ToString();
+        }
+
+        public override void ShowChar()
+        {
+            base.ShowChar();
         }
     }
 }

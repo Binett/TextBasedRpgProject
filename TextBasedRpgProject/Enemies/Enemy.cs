@@ -1,16 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection.Metadata.Ecma335;
 using System.Text;
 
 namespace TextBasedRpgProject.Enemies
 {
     public abstract class Enemy
     {
-        Random rand = new Random();
-        public bool Dead;
+        static Random rand = new Random();
+        private bool dead;
         private int hp;
         private int damage;
-        private int xp;       
+        private int xp;
         private int maxHp;
 
         public string Name { get; set; }
@@ -23,7 +24,7 @@ namespace TextBasedRpgProject.Enemies
             }
             set
             {
-                if (value>0)
+                if (value > 0)
                 {
                     hp = value;
                 }
@@ -33,25 +34,25 @@ namespace TextBasedRpgProject.Enemies
                 }
             }
         }
-
         public int Damage { get => damage; set => damage = value; }
-        public int Xp { get => xp; set => xp = value; }        
+        public int Xp { get => xp; set => xp = value; }
         public int MaxHp { get => maxHp; set => maxHp = value; }
-
-
+        public bool Dead { get => dead; set => dead = value; }
 
         protected Enemy()
         {
         }
+
+        public int Attack()
+        {
+            Damage = rand.Next(5, 10);
+            return Damage;
+        }
+
+
         public virtual void Heal()
         {
             hp += maxHp;
-        }
-
-        public virtual int Attack(Player player)
-        {
-            player.TakeDamage(rand.Next(10,20)*player.level);
-            return damage;
         }
 
         public virtual int GiveXp()
@@ -73,9 +74,10 @@ namespace TextBasedRpgProject.Enemies
             }
             return Dead;
         }
-        public void TakeDamage(int damage)
+
+        public virtual void ShowChar()
         {
-            this.Hp -= damage;
+            Utilitys.LogoRandomEnemy();
         }
     }
 }
