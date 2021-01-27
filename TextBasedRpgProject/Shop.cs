@@ -29,6 +29,7 @@ namespace TextBasedRpgProject
                 Utilitys.PrintYellow(" 1. Weapon            $" + weaponPower + " |");
                 Utilitys.PrintYellow(" 2. Armor             $" + armorPower + " |");
                 Utilitys.PrintYellow(" 3. Potion            $" + potionPower + "  |");
+                Utilitys.PrintYellow(" 4. Go back to menu        |");
                 Utilitys.PrintYellow("----------------------------");
                 Utilitys.PrintYellow(player.ToString());
                 char input = Console.ReadKey().KeyChar;

@@ -7,12 +7,14 @@ namespace TextBasedRpgProject.Enemies
 {
     class Grunt : Enemy
     {
+        Random rand = new Random();
         public Grunt()
         {
             base.Name = "Gurgel";
             base.Hp = 100;            
             base.Dead = false;
             base.MaxHp = 100;
+            base.Level = 1;
         }
 
         public override bool Alive()
@@ -20,11 +22,9 @@ namespace TextBasedRpgProject.Enemies
             return base.Alive();
         }
 
-
-
-        public override int GiveXp()
+        public override int GiveXp(Player player)
         {
-            return base.GiveXp();
+            return base.GiveXp(player);
         }
 
         public override void Heal()
@@ -37,9 +37,21 @@ namespace TextBasedRpgProject.Enemies
             return base.ToString();
         }
 
+        public override int Attack()
+        {
+            return base.Attack();
+        }
+
         public override void ShowChar()
         {
-            base.ShowChar();
+            Utilitys.LogoGrunt();
         }
+
+
+        public override void EnemyLevel(Player player)
+        {
+            base.EnemyLevel(player);
+        }
+       
     }
 }

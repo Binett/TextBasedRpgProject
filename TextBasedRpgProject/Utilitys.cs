@@ -56,7 +56,7 @@ namespace TextBasedRpgProject
 
                 if (i < diferential)
                 {
-                    Console.BackgroundColor = ConsoleColor.DarkCyan;
+                    Console.BackgroundColor = ConsoleColor.DarkMagenta;
                     Console.Write(" ");
                     Console.ResetColor();
                 }
@@ -156,8 +156,7 @@ namespace TextBasedRpgProject
        \:: :     /     `     ,   /  |
         || |    (        ,' /   /   |
         ||                ,'   /    |");
-        }
-        //Random
+        }        
         public static void LogoRandomEnemy()
         {
             PrintYellow(@"      __      _
@@ -175,8 +174,33 @@ namespace TextBasedRpgProject
 //  (___|");
         }
         //Grunt
-
-
+        public static void LogoGrunt()
+        {
+            Utilitys.PrintYellow(@"                                              ,--,  ,.-.
+                ,                   \,       '-,-`,'-.' | ._
+               /|           \    ,   |\         }  )/  / `-,',
+               [ '          |\  /|   | |        /  \|  |/`  ,`
+               | |       ,.`  `,` `, | |  _,...(   (      _',
+               \  \  __ ,-` `  ,  , `/ |,'      Y     (   \_L\
+                \  \_\,``,   ` , ,  /  |         )         _,/
+                 \  '  `  ,_ _`_,-,<._.<        /         /
+                  ', `>.,`  `  `   ,., |_      |         /
+                    \/`  `,   `   ,`  | /__,.-`    _,   `\
+                -,-..\  _  \  `  /  ,  / `._) _,-\`       \
+                 \_,,.) /\    ` /  / ) (-,, ``    ,        |
+                ,` )  | \_\       '-`  |  `(               \
+               /  /```(   , --, ,' \   |`<`    ,            |
+              /  /_,--`\   <\  V /> ,` )<_/)  | \      _____)
+        ,-, ,`   `   (_,\ \    |   /) / __/  /   `----`
+       (-, \           ) \ ('_.-._)/ /,`    /
+       | /  `          `/ \\ V   V, /`     /
+    ,--\(        ,     <_/`\\     ||      /
+   (   ,``-     \/|         \-A.A-`|     /
+  ,>,_ )_,..(    )\          -,,_-`  _--`
+ (_ \|`   _,/_  /  \_            ,--`
+  \( `   <.,../`     `-.._   _,-`
+   `                      ```");
+        }
         //Logo Main
         public static void MainLogo()
         {

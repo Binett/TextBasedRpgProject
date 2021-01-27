@@ -10,6 +10,7 @@ namespace TextBasedRpgProject
     {
         List<Enemy> listOfEnemies = new List<Enemy>();
         Player player = new Player();
+        
 
         /*|-----------------------------------------------------------------------------------------------------------------------------------------------------|
          *|---------------------------------------------------------> Start up the game <-----------------------------------------------------------------------|
@@ -22,11 +23,10 @@ namespace TextBasedRpgProject
             Utilitys.MainLogo();
             Console.Write("Enter your Name:");
             Console.ForegroundColor = ConsoleColor.Green;
-            player.Name = Console.ReadLine();
-            if (player.Level == 1)
-            {
-                player.MaxHpPlayer();
-            }
+            player.Name = Console.ReadLine();           
+            Console.ReadKey();
+            player.MaxHpPlayer();
+
             Console.ResetColor();
             Console.Clear();
 
@@ -60,9 +60,9 @@ namespace TextBasedRpgProject
          *|-----------------------------------------------------------------------------------------------------------------------------------------------------|*/
 
         private void SetupGame()
-        {
+        {            
             Grunt micke = new Grunt();
-            Wizard jonas = new Wizard();
+            Wizard jonas = new Wizard();           
             listOfEnemies.Add(jonas);
             listOfEnemies.Add(micke);
         }
@@ -77,7 +77,8 @@ namespace TextBasedRpgProject
             int fightOrFlee = rand.Next(1, 10);
             if (fightOrFlee == 1)
             {
-                Console.WriteLine("You see nothing but trees, boring as fuck");
+                Console.WriteLine("You see nothing but trees, but you gaines some experience");
+                
             }
             else
             {
@@ -98,6 +99,7 @@ namespace TextBasedRpgProject
             Console.WriteLine("[Press enter to continue]");
             Console.ReadKey();
             Console.Clear();
+            enemy.EnemyLevel(player);
 
             while (enemy.Alive())
             {
@@ -125,9 +127,12 @@ namespace TextBasedRpgProject
 
                 if (!enemy.Alive())
                 {
+                    Console.Clear();
                     player.Gold += player.GetGold();
-                    Utilitys.PrintGreen($"{enemy.Name} is defeated, you gain {enemy.GiveXp() * player.Level} XP and {player.GetGold()} gold");
-                    player.Xp += enemy.Xp * player.Level;
+                    player.GetXp(enemy, player);
+                    Utilitys.PrintGreen($"{enemy.Name} is defeated, you gain {enemy.GiveXp(player) * (player.Level)} XP and {player.GetGold()} gold");
+
+                    //player.Xp += enemy.Xp * player.Level;
                     enemy.Heal();
                     Console.WriteLine("[Press enter to continue]");
                     Console.ReadKey();

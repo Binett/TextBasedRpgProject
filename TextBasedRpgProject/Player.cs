@@ -7,7 +7,7 @@ namespace TextBasedRpgProject
     public class Player
     {
         static Random rand = new Random();
-        
+       
         private string name;
         private int maxHp=250;
         private int damage;
@@ -17,7 +17,7 @@ namespace TextBasedRpgProject
         private int armorValue=0;
         private int weaponValue=0;
         private int potions = 0;
-        private int potionValue = 100;
+             
 
 
         public int Hp 
@@ -47,7 +47,7 @@ namespace TextBasedRpgProject
         public int ArmorValue { get => armorValue; set => armorValue = value; }       
         public int WeaponValue { get => weaponValue; set => weaponValue = value; }
         public int Potions { get => potions; set => potions = value; }
-
+        
 
         public int Attack()
         {
@@ -67,7 +67,7 @@ namespace TextBasedRpgProject
         }
         public int XpToLevel()
         {
-            return 100 *  Level +400;
+            return 100 *  Level;
         }
         public bool CanLevelUp()
         {
@@ -107,10 +107,14 @@ namespace TextBasedRpgProject
             }
             else
             {
-                hp += potionValue;
+                hp = maxHp;
                 potions--;
             }          
                 
         }
+        public void GetXp(Enemy enemy, Player player)
+        {
+            Xp += enemy.GiveXp(player);
+        }       
     }
 }

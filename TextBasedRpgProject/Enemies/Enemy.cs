@@ -7,12 +7,20 @@ namespace TextBasedRpgProject.Enemies
 {
     public abstract class Enemy
     {
+        protected Enemy()
+        {
+        }
         static Random rand = new Random();
+        
+
+
+
         private bool dead;
         private int hp;
         private int damage;
         private int xp;
         private int maxHp;
+        private int level;
 
         public string Name { get; set; }
         public int Hp
@@ -38,30 +46,22 @@ namespace TextBasedRpgProject.Enemies
         public int Xp { get => xp; set => xp = value; }
         public int MaxHp { get => maxHp; set => maxHp = value; }
         public bool Dead { get => dead; set => dead = value; }
+        public int Level { get => level; set => level = value; }
 
-        protected Enemy()
+        public virtual int Attack()
         {
-        }
-
-        public int Attack()
-        {
-            Damage = rand.Next(5, 10);
+            Damage = rand.Next(5, 10)*level;
             return Damage;
         }
-
-
         public virtual void Heal()
         {
             hp += maxHp;
         }
-
-        public virtual int GiveXp()
-        {
-            Random rand = new Random();
+        public virtual int GiveXp(Player player)
+        {            
             Xp = rand.Next(20, 50);
             return Xp;
         }
-
         public virtual bool Alive()
         {
             if (Hp <= 0)
@@ -74,10 +74,13 @@ namespace TextBasedRpgProject.Enemies
             }
             return Dead;
         }
-
         public virtual void ShowChar()
         {
             Utilitys.LogoRandomEnemy();
+        }
+        public virtual void EnemyLevel(Player player)
+        {
+            level = player.Level;
         }
     }
 }
