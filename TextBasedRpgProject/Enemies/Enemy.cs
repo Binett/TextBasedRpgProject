@@ -20,7 +20,7 @@ namespace TextBasedRpgProject.Enemies
         private int xp;
         private int maxHp;
         private int level;
-
+        private string type;
         
 
         public string Name { get; set; }
@@ -43,24 +43,48 @@ namespace TextBasedRpgProject.Enemies
                 }
             }
         }
-        public int Damage { get => damage; set => damage = value; }
+        public int Damage 
+        {
+            get
+            {
+                return damage;
+            }
+            set
+            {
+                if (damage<0)
+                {
+                    damage = 0;
+                }
+                else
+                {
+                    damage = value;
+                }
+            }
+        }
         public int Xp { get => xp; set => xp = value; }
         public int MaxHp { get => maxHp; set => maxHp = value; }
         public bool Alive { get => alive; set => alive = value; }
-        public int Level { get => level; set => level = value; }
-        public string Name1 { get => name; set => name = value; }
-       
+        public int Level { get => level; set => level = value; }       
+        public string Type { get => type; set => type = value; }
 
         public virtual int Attack(Player player)
         {
-            Damage = rand.Next(5, 10) * player.Level;
+            damage = rand.Next(5, 10) * player.Level;
             if (player.ArmorValue > 0)
             {
-                return Damage -= 10 * player.ArmorValue;
+                damage -= 10 + player.ArmorValue;
+                if (damage<0)
+                {
+                    return 0;
+                }
+                else
+                {
+                    return damage;
+                }
             }
             else
             {
-                return Damage;
+                return damage;
             }            
             
         }

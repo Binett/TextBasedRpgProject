@@ -7,6 +7,7 @@ namespace TextBasedRpgProject
 {
     public class Player
     {
+        //TODO: Skapa godmode
         static Random rand = new Random();        
        
         private string name;

@@ -10,7 +10,7 @@ namespace TextBasedRpgProject
     class Game
     {
         List<Enemy> listOfEnemies = new List<Enemy>();
-        static Player player = new Player();
+        Player player = new Player();
         
 
         /*|-----------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -59,7 +59,7 @@ namespace TextBasedRpgProject
         /*|-----------------------------------------------------------------------------------------------------------------------------------------------------|
          *|-------------------------------------------------> objects of the enemies <--------------------------------------------------------------------------|
          *|-----------------------------------------------------------------------------------------------------------------------------------------------------|*/
-
+        //TODO: Måste ågärdas 
         private void SetupGame()
         {
             Grunt micke = new Grunt();
@@ -72,6 +72,7 @@ namespace TextBasedRpgProject
          *|-----------------------------------> Battle or flee method, 10 percents chance of not fighting <-----------------------------------------------------|
          *|-----------------------------------------------------------------------------------------------------------------------------------------------------|*/
 
+        //Todo: Fixa random snyggare
         private void GoAdventure()
         {
             Random rand = new Random();
@@ -92,10 +93,10 @@ namespace TextBasedRpgProject
          *|-----------------------------------------------> Encounters for the battles <------------------------------------------------------------------------|
          *|-----------------------------------------------------------------------------------------------------------------------------------------------------|*/
 
-
+        //Todo: Städa död kod
         private void Battle(Enemy enemy, Player player)
         {           
-            Utilitys.PrintRed("You see a wild " + enemy.Name + " Lurking in the shadows, you raise your blade ready to charge the enemy!\n");
+            Utilitys.PrintRed($"You see a wild {enemy.Type} called {enemy.Name} Lurking in the shadows, you raise your blade ready to charge the enemy!\n");
             enemy.ShowChar();
             Console.WriteLine("[Press enter to continue]");
             Console.ReadKey();

@@ -1,19 +1,19 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Reflection.Metadata.Ecma335;
-using System.Text;
 
 namespace TextBasedRpgProject.Enemies
 {
     class Grunt : Enemy
-    {    
+    {
+            
+
         public Grunt()
         {
-            base.Name = "Gurgel";
+            base.Name = Utilitys.RandomName();
             base.Hp = 100;            
             base.Alive = false;
             base.MaxHp = 100;
             base.Level = 1;
+            base.Type = "Grunt";
         }
 
         public override bool EnemyAlive()

@@ -5,7 +5,16 @@ namespace TextBasedRpgProject
 {
     static class Utilitys
     {
-        static Random rand = new Random();
+        public static string RandomName()
+        {           
+            var names = new string[]
+            {
+                "Björn","Tobias","Daniel","Gruntosaur","Wille"
+            };
+            var rand = new Random();
+            var index = rand.Next(names.Length);
+            return names[index];
+        }
 
         /*|-----------------------------------------------------------------------------------------------------------------------------------------------------|
          *|------------------------------------------------------------> Print in green <-----------------------------------------------------------------------|
@@ -156,7 +165,7 @@ namespace TextBasedRpgProject
        \:: :     /     `     ,   /  |
         || |    (        ,' /   /   |
         ||                ,'   /    |");
-        }        
+        }
         public static void LogoRandomEnemy()
         {
             PrintYellow(@"      __      _

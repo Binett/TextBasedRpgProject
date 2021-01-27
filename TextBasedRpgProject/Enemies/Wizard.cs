@@ -7,15 +7,18 @@ namespace TextBasedRpgProject.Enemies
 {
     public class Wizard : Enemy
     {
+        
+
         public Wizard()
         {
-            base.Name = "Wizard";
+            base.Name = Utilitys.RandomName();
             base.Hp = 100;        
             base.Alive = false;            
             base.MaxHp=100;
-            base.Level= 1;          
+            base.Level= 1;
+            base.Type = "Wizard";
         }
-      
+        
 
         public override bool EnemyAlive()
         {
