@@ -6,20 +6,19 @@ using System.Text;
 namespace TextBasedRpgProject.Enemies
 {
     class Grunt : Enemy
-    {
-        Random rand = new Random();
+    {    
         public Grunt()
         {
             base.Name = "Gurgel";
             base.Hp = 100;            
-            base.Dead = false;
+            base.Alive = false;
             base.MaxHp = 100;
             base.Level = 1;
         }
 
-        public override bool Alive()
+        public override bool EnemyAlive()
         {
-            return base.Alive();
+            return base.EnemyAlive();
         }
 
         public override int GiveXp(Player player)
@@ -37,9 +36,9 @@ namespace TextBasedRpgProject.Enemies
             return base.ToString();
         }
 
-        public override int Attack()
+        public override int Attack(Player player)
         {
-            return base.Attack();
+            return base.Attack(player);
         }
 
         public override void ShowChar()

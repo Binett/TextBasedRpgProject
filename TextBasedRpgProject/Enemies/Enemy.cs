@@ -11,16 +11,17 @@ namespace TextBasedRpgProject.Enemies
         {
         }
         static Random rand = new Random();
-        
+     
 
-
-
-        private bool dead;
+        private string name;
+        private bool alive;
         private int hp;
         private int damage;
         private int xp;
         private int maxHp;
         private int level;
+
+        
 
         public string Name { get; set; }
         public int Hp
@@ -45,34 +46,45 @@ namespace TextBasedRpgProject.Enemies
         public int Damage { get => damage; set => damage = value; }
         public int Xp { get => xp; set => xp = value; }
         public int MaxHp { get => maxHp; set => maxHp = value; }
-        public bool Dead { get => dead; set => dead = value; }
+        public bool Alive { get => alive; set => alive = value; }
         public int Level { get => level; set => level = value; }
+        public string Name1 { get => name; set => name = value; }
+       
 
-        public virtual int Attack()
+        public virtual int Attack(Player player)
         {
-            Damage = rand.Next(5, 10)*level;
-            return Damage;
-        }
-        public virtual void Heal()
-        {
-            hp += maxHp;
-        }
-        public virtual int GiveXp(Player player)
-        {            
-            Xp = rand.Next(20, 50);
-            return Xp;
-        }
-        public virtual bool Alive()
-        {
-            if (Hp <= 0)
+            Damage = rand.Next(5, 10) * player.Level;
+            if (player.ArmorValue > 0)
             {
-                Dead = false;
+                return Damage -= 10 * player.ArmorValue;
             }
             else
             {
-                Dead = true;
+                return Damage;
+            }            
+            
+        }
+        public virtual void Heal()
+        {
+            maxHp = maxHp * level;
+            hp += MaxHp;
+        }
+        public virtual int GiveXp(Player player)
+        {
+            Xp = rand.Next(20, 50);
+            return Xp;
+        }
+        public virtual bool EnemyAlive()
+        {
+            if (Hp <= 0)
+            {
+                Alive = false;
             }
-            return Dead;
+            else
+            {
+                Alive = true;
+            }
+            return Alive;            
         }
         public virtual void ShowChar()
         {
@@ -81,6 +93,11 @@ namespace TextBasedRpgProject.Enemies
         public virtual void EnemyLevel(Player player)
         {
             level = player.Level;
+        }
+        public void MaxHpEnemy()
+        {
+            maxHp = 200 * Level;
+            Hp = MaxHp;
         }
     }
 }

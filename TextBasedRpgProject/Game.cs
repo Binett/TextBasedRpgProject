@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 using System.Threading;
 using TextBasedRpgProject.Enemies;
 
@@ -9,7 +10,7 @@ namespace TextBasedRpgProject
     class Game
     {
         List<Enemy> listOfEnemies = new List<Enemy>();
-        Player player = new Player();
+        static Player player = new Player();
         
 
         /*|-----------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -23,8 +24,8 @@ namespace TextBasedRpgProject
             Utilitys.MainLogo();
             Console.Write("Enter your Name:");
             Console.ForegroundColor = ConsoleColor.Green;
-            player.Name = Console.ReadLine();           
-            Console.ReadKey();
+            player.Name = Console.ReadLine();    
+            
             player.MaxHpPlayer();
 
             Console.ResetColor();
@@ -60,9 +61,9 @@ namespace TextBasedRpgProject
          *|-----------------------------------------------------------------------------------------------------------------------------------------------------|*/
 
         private void SetupGame()
-        {            
+        {
             Grunt micke = new Grunt();
-            Wizard jonas = new Wizard();           
+            Wizard jonas = new Wizard();
             listOfEnemies.Add(jonas);
             listOfEnemies.Add(micke);
         }
@@ -82,7 +83,7 @@ namespace TextBasedRpgProject
             }
             else
             {
-                int value = rand.Next(listOfEnemies.Count);
+                int value = rand.Next(listOfEnemies.Count);              
                 Battle(listOfEnemies[value], player);
             }
         }
@@ -93,17 +94,17 @@ namespace TextBasedRpgProject
 
 
         private void Battle(Enemy enemy, Player player)
-        {
+        {           
             Utilitys.PrintRed("You see a wild " + enemy.Name + " Lurking in the shadows, you raise your blade ready to charge the enemy!\n");
             enemy.ShowChar();
             Console.WriteLine("[Press enter to continue]");
             Console.ReadKey();
             Console.Clear();
             enemy.EnemyLevel(player);
-
-            while (enemy.Alive())
+            enemy.MaxHpEnemy();
+            while (enemy.EnemyAlive())
             {
-
+                
                 Utilitys.PrintRed(@"██████╗  █████╗ ████████╗████████╗██╗     ███████╗
 ██╔══██╗██╔══██╗╚══██╔══╝╚══██╔══╝██║     ██╔════╝
 ██████╔╝███████║   ██║      ██║   ██║     █████╗  
@@ -112,7 +113,7 @@ namespace TextBasedRpgProject
 ╚═════╝ ╚═╝  ╚═╝   ╚═╝      ╚═╝   ╚══════╝╚══════╝
 ");
                 enemy.Hp -= player.Attack();
-                player.Hp -= enemy.Attack();
+                player.Hp -= enemy.Attack(player);
                 Utilitys.PrintGreen($"You slash your sword at {enemy.Name} For {player.Damage} dmg!");
                 Utilitys.PrintRed($"{enemy.Name} hits {player.Name} for {enemy.Damage} dmg!");
                 ShowBattle(enemy, player);
@@ -125,14 +126,12 @@ namespace TextBasedRpgProject
                 }
 
 
-                if (!enemy.Alive())
+                if (!enemy.EnemyAlive())
                 {
                     Console.Clear();
                     player.Gold += player.GetGold();
-                    player.GetXp(enemy, player);
-                    Utilitys.PrintGreen($"{enemy.Name} is defeated, you gain {enemy.GiveXp(player) * (player.Level)} XP and {player.GetGold()} gold");
-
-                    //player.Xp += enemy.Xp * player.Level;
+                    player.Xp += enemy.GiveXp(player);
+                    Utilitys.PrintGreen($"{enemy.Name} is defeated, you gain {enemy.Xp} XP and {player.GetGold()} gold");                   
                     enemy.Heal();
                     Console.WriteLine("[Press enter to continue]");
                     Console.ReadKey();

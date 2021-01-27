@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text.RegularExpressions;
 using System.Threading;
 using TextBasedRpgProject.Enemies;
 
@@ -6,7 +7,7 @@ namespace TextBasedRpgProject
 {
     public class Player
     {
-        static Random rand = new Random();
+        static Random rand = new Random();        
        
         private string name;
         private int maxHp=250;
@@ -47,12 +48,18 @@ namespace TextBasedRpgProject
         public int ArmorValue { get => armorValue; set => armorValue = value; }       
         public int WeaponValue { get => weaponValue; set => weaponValue = value; }
         public int Potions { get => potions; set => potions = value; }
-        
+  
 
         public int Attack()
         {
-            Damage = rand.Next(20, 30);
-            return Damage;
+            if (WeaponValue<=0)
+            {
+                return Damage = rand.Next(20, 30);
+            }
+            else
+            {
+                return Damage = rand.Next(20, 30) * (weaponValue+1);
+            }
         }
         public int GetGold()
         {
@@ -63,11 +70,13 @@ namespace TextBasedRpgProject
             return $"Name: {Name}\n" +
                 $"Level: {Level}\n" +
                 $"Gold: {Gold}\n" +
-                $"Potions {Potions}";
+                $"Potions {Potions}\n" +
+                $"Armor {ArmorValue}\n" +
+                $"Weapon {weaponValue}\n";
         }
         public int XpToLevel()
         {
-            return 100 *  Level;
+            return 100 * Level;
         }
         public bool CanLevelUp()
         {
@@ -112,9 +121,6 @@ namespace TextBasedRpgProject
             }          
                 
         }
-        public void GetXp(Enemy enemy, Player player)
-        {
-            Xp += enemy.GiveXp(player);
-        }       
+ 
     }
 }
