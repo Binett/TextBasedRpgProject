@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq.Expressions;
 using System.Threading;
 using TextBasedRpgProject.Enemies;
 
@@ -9,9 +7,9 @@ namespace TextBasedRpgProject
 {
     class Game
     {
-        List<Enemy> listOfEnemies = new List<Enemy>();
+        Enemy currentEnemy;
         Player player = new Player();
-        
+
 
         /*|-----------------------------------------------------------------------------------------------------------------------------------------------------|
          *|---------------------------------------------------------> Start up the game <-----------------------------------------------------------------------|
@@ -20,14 +18,12 @@ namespace TextBasedRpgProject
         public void StartGame()
         {
             Console.Title = "Magic Mayhem";
-            SetupGame();
             Utilitys.MainLogo();
             Console.Write("Enter your Name:");
             Console.ForegroundColor = ConsoleColor.Green;
-            player.Name = Console.ReadLine();    
-            
+            player.Name = Console.ReadLine();
+       
             player.MaxHpPlayer();
-
             Console.ResetColor();
             Console.Clear();
 
@@ -56,23 +52,12 @@ namespace TextBasedRpgProject
             }
         }
 
-        /*|-----------------------------------------------------------------------------------------------------------------------------------------------------|
-         *|-------------------------------------------------> objects of the enemies <--------------------------------------------------------------------------|
-         *|-----------------------------------------------------------------------------------------------------------------------------------------------------|*/
-        //TODO: Måste ågärdas 
-        private void SetupGame()
-        {
-            Grunt micke = new Grunt();
-            Wizard jonas = new Wizard();
-            listOfEnemies.Add(jonas);
-            listOfEnemies.Add(micke);
-        }
+
 
         /*|-----------------------------------------------------------------------------------------------------------------------------------------------------|
          *|-----------------------------------> Battle or flee method, 10 percents chance of not fighting <-----------------------------------------------------|
          *|-----------------------------------------------------------------------------------------------------------------------------------------------------|*/
 
-        //Todo: Fixa random snyggare
         private void GoAdventure()
         {
             Random rand = new Random();
@@ -80,12 +65,10 @@ namespace TextBasedRpgProject
             if (fightOrFlee == 1)
             {
                 Console.WriteLine("You see nothing but trees, but you gaines some experience");
-                
             }
             else
             {
-                int value = rand.Next(listOfEnemies.Count);              
-                Battle(listOfEnemies[value], player);
+                Battle();
             }
         }
 
@@ -93,66 +76,52 @@ namespace TextBasedRpgProject
          *|-----------------------------------------------> Encounters for the battles <------------------------------------------------------------------------|
          *|-----------------------------------------------------------------------------------------------------------------------------------------------------|*/
 
-        //Todo: Städa död kod
-        private void Battle(Enemy enemy, Player player)
-        {           
-            Utilitys.PrintRed($"You see a wild {enemy.Type} called {enemy.Name} Lurking in the shadows, you raise your blade ready to charge the enemy!\n");
-            enemy.ShowChar();
+
+        private void Battle()
+        {
+            if (currentEnemy == null)            
+            {
+                var rand = new Random().Next(0, 3);
+                switch (rand)
+                {
+                    case 0:
+                        currentEnemy = new Wizard(player);
+                        break;
+                    case 1:
+                        currentEnemy = new Grunt(player);
+                        break;
+                    case 2:
+                        currentEnemy = new Vampire(player);
+                        break;
+                }
+            }
+            Utilitys.PrintRed($"You see a wild {currentEnemy.Type} called {currentEnemy.Name} Lurking in the shadows, you raise your blade ready to charge the enemy!\n");
+            currentEnemy.ShowChar();
             Console.WriteLine("[Press enter to continue]");
             Console.ReadKey();
-            Console.Clear();
-            enemy.EnemyLevel(player);
-            enemy.MaxHpEnemy();
-            while (enemy.EnemyAlive())
+            Console.Clear();      
+            currentEnemy.EnemyLevel();
+            currentEnemy.MaxHpEnenmy();
+            while (currentEnemy.Alive)
             {
-                
-                Utilitys.PrintRed(@"██████╗  █████╗ ████████╗████████╗██╗     ███████╗
-██╔══██╗██╔══██╗╚══██╔══╝╚══██╔══╝██║     ██╔════╝
-██████╔╝███████║   ██║      ██║   ██║     █████╗  
-██╔══██╗██╔══██║   ██║      ██║   ██║     ██╔══╝  
-██████╔╝██║  ██║   ██║      ██║   ███████╗███████╗
-╚═════╝ ╚═╝  ╚═╝   ╚═╝      ╚═╝   ╚══════╝╚══════╝
-");
-                enemy.Hp -= player.Attack();
-                player.Hp -= enemy.Attack(player);
-                Utilitys.PrintGreen($"You slash your sword at {enemy.Name} For {player.Damage} dmg!");
-                Utilitys.PrintRed($"{enemy.Name} hits {player.Name} for {enemy.Damage} dmg!");
-                ShowBattle(enemy, player);
+
+                Utilitys.BattleLogo();              
+                var playerDamage = player.Attack();
+                var enemyDamage = currentEnemy.Attack();
+                Utilitys.PrintGreen($"You slash your sword at {currentEnemy.Name} For {playerDamage} dmg!");
+                Utilitys.PrintRed($"{currentEnemy.Name} hits {player.Name} for {enemyDamage} dmg!");
+                player.Hp -= enemyDamage;
+                currentEnemy.Hp -= playerDamage;
+                ShowBattle(currentEnemy, player);
                 Utilitys.PrintYellow("(H)eal");
                 Console.Write("[Press enter to continue]");
                 char input = Console.ReadKey().KeyChar;
                 if (input == 'h')
                 {
-                    player.Heal(player);
+                    player.Heal();
                 }
 
 
-                if (!enemy.EnemyAlive())
-                {
-                    Console.Clear();
-                    player.Gold += player.GetGold();
-                    player.Xp += enemy.GiveXp(player);
-                    Utilitys.PrintGreen($"{enemy.Name} is defeated, you gain {enemy.Xp} XP and {player.GetGold()} gold");                   
-                    enemy.Heal();
-                    Console.WriteLine("[Press enter to continue]");
-                    Console.ReadKey();
-                    Console.Clear();
-
-                    if (player.CanLevelUp())
-                    {
-                        player.Hp = 0;
-                        player.LevelUp();
-                        player.MaxHpPlayer();
-                    }
-                    if (player.Level >= 10)
-                    {
-                        Console.WriteLine($"You are now level 10, you have {player.Xp} XP and {player.Hp}\n Congratulations! You won the game :)");
-                        Console.ReadKey();
-                        Environment.Exit(0);
-                    }
-                    return;
-
-                }
                 else if (player.Hp <= 0)
                 {
                     Console.Clear();
@@ -162,8 +131,27 @@ namespace TextBasedRpgProject
                 }
                 Console.Clear();
             }
-
+            Console.Clear();
+            player.Gold += player.GetGold();
+            player.Xp += currentEnemy.GiveXp();
+            Utilitys.PrintGreen($"{currentEnemy.Name} is defeated, you gain {currentEnemy.Xp} XP and {player.GetGold()} gold");
+            currentEnemy = null;
+            Console.WriteLine("[Press enter to continue]");
             Console.ReadKey();
+            Console.Clear();
+
+            if (player.CanLevelUp())
+            {
+                player.Hp = 0;
+                player.LevelUp();
+                player.MaxHpPlayer();
+            }
+            if (player.Level >= 10)
+            {
+                Console.WriteLine($"You are now level 10, you have {player.Xp} XP and {player.MaxHp} HP\n Congratulations! You won the game :)");
+                Console.ReadKey();
+                Environment.Exit(0);
+            }
         }
 
         /*|------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -219,7 +207,5 @@ namespace TextBasedRpgProject
             Console.WriteLine($"Current HP:\t\t {player.Hp}/{player.MaxHp}");
             Utilitys.HealtBar(player, (decimal)player.Hp / (decimal)player.MaxHp, 40);
         }
-
-
     }
 }

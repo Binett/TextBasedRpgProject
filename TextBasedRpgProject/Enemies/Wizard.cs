@@ -1,48 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Windows.Markup;
+﻿
 
 namespace TextBasedRpgProject.Enemies
 {
     public class Wizard : Enemy
     {
-        
-
-        public Wizard()
+        public Wizard(Player player)
+           : base(player)
         {
-            base.Name = Utilitys.RandomName();
-            base.Hp = 100;        
-            base.Alive = false;            
-            base.MaxHp=100;
-            base.Level= 1;
+            base.Hp = base.MaxHp -= 20;
             base.Type = "Wizard";
         }
-        
 
-        public override bool EnemyAlive()
+        public override int Attack()
         {
-            return base.EnemyAlive();
-        }
-
-        //public override int Attack()
-        //{
-        //    return base.Attack();
-        //}
-
-        public override void EnemyLevel(Player player)
-        {
-            base.EnemyLevel(player);
-        }
-
-        public override int GiveXp(Player player)
-        {
-            return base.GiveXp(player);
-        }
-
-        public override void Heal()
-        {
-            base.Heal();
+            return base.Attack() + 10;
         }
 
         public override void ShowChar()

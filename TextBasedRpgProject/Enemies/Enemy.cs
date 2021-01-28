@@ -1,27 +1,27 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Reflection.Metadata.Ecma335;
-using System.Text;
 
 namespace TextBasedRpgProject.Enemies
 {
+
+
     public abstract class Enemy
     {
-        protected Enemy()
+        protected Enemy(Player player)
         {
+            this.player = player;
+            var names = new string[]
+        {
+                "Torkel","Fasan","Glenn","Börje","Ostraus"
+        };
+            var rand = new Random();
+            var index = rand.Next(names.Length);
+            this.Name = names[index];
         }
-        static Random rand = new Random();
-     
 
-        private string name;
-        private bool alive;
-        private int hp;
-        private int damage;
-        private int xp;
-        private int maxHp;
-        private int level;
-        private string type;
-        
+        static Random rand = new Random();
+        private Player player;
+
+        private int hp = 100;
 
         public string Name { get; set; }
         public int Hp
@@ -43,85 +43,35 @@ namespace TextBasedRpgProject.Enemies
                 }
             }
         }
-        public int Damage 
+        public int Xp { get; set; }
+        public int MaxHp { get; set; } = 100;
+        public bool Alive { get { return hp > 0; } }
+        public int Level { get; set; }
+        public string Type { get; set; }
+        public virtual int Attack()
         {
-            get
-            {
-                return damage;
-            }
-            set
-            {
-                if (damage<0)
-                {
-                    damage = 0;
-                }
-                else
-                {
-                    damage = value;
-                }
-            }
+            var damage = rand.Next(5, 10) * player.Level - 3 * player.ArmorValue;
+            return damage < 0 ? 0 : damage;
         }
-        public int Xp { get => xp; set => xp = value; }
-        public int MaxHp { get => maxHp; set => maxHp = value; }
-        public bool Alive { get => alive; set => alive = value; }
-        public int Level { get => level; set => level = value; }       
-        public string Type { get => type; set => type = value; }
-
-        public virtual int Attack(Player player)
+        public virtual int GiveXp()
         {
-            damage = rand.Next(5, 10) * player.Level;
-            if (player.ArmorValue > 0)
-            {
-                damage -= 10 + player.ArmorValue;
-                if (damage<0)
-                {
-                    return 0;
-                }
-                else
-                {
-                    return damage;
-                }
-            }
-            else
-            {
-                return damage;
-            }            
-            
-        }
-        public virtual void Heal()
-        {
-            maxHp = maxHp * level;
-            hp += MaxHp;
-        }
-        public virtual int GiveXp(Player player)
-        {
-            Xp = rand.Next(20, 50);
+            Xp = rand.Next(20, 50)*Level;
             return Xp;
-        }
-        public virtual bool EnemyAlive()
-        {
-            if (Hp <= 0)
-            {
-                Alive = false;
-            }
-            else
-            {
-                Alive = true;
-            }
-            return Alive;            
         }
         public virtual void ShowChar()
         {
             Utilitys.LogoRandomEnemy();
         }
-        public virtual void EnemyLevel(Player player)
-        {
-            level = player.Level;
+        public virtual void EnemyLevel()
+        {           
+            Level = player.Level;            
         }
-        public void MaxHpEnemy()
+        public void MaxHpEnenmy()
         {
-            maxHp = 200 * Level;
+            MaxHp *= Level;
             Hp = MaxHp;
         }
+
+
     }
 }

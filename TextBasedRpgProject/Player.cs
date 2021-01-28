@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Text.RegularExpressions;
 using System.Threading;
 using TextBasedRpgProject.Enemies;
 
@@ -7,22 +6,27 @@ namespace TextBasedRpgProject
 {
     public class Player
     {
-        //TODO: Skapa godmode
-        static Random rand = new Random();        
-       
+        static Random rand = new Random();
         private string name;
-        private int maxHp=250;
-        private int damage;
-        private int level = 1;
-        public int hp = 200;
-        private int xp = 0;
-        private int armorValue=0;
-        private int weaponValue=0;
-        private int potions = 0;
-             
+        private int hp = 200;
 
 
-        public int Hp 
+        public string Name
+        {
+            get
+            {
+                return name;
+            }
+            set
+            {
+                if (value == "robin")
+                {
+                    EnableGodMode();
+                }
+                name = value;
+            }
+        }
+        public int Hp
         {
             get
             {
@@ -36,36 +40,27 @@ namespace TextBasedRpgProject
                 }
                 else
                 {
-                     hp = 0;
+                    hp = 0;
                 }
             }
-        }        
+        }
         public int Gold { get; set; }
-        public int Damage { get => damage; set => damage = value; }
-        public int MaxHp { get => maxHp; set => maxHp = value; } 
-        public string Name { get => name; set => name = value; }
-        public int Xp { get => xp; set => xp = value; }
-        public int Level { get => level; set => level = value; }
-        public int ArmorValue { get => armorValue; set => armorValue = value; }       
-        public int WeaponValue { get => weaponValue; set => weaponValue = value; }
-        public int Potions { get => potions; set => potions = value; }
-  
+        public int MaxHp { get; set; }
+        public int Xp { get; set; } = 0;
+        public int Level { get; set; } = 1;
+        public int ArmorValue { get; set; } = 0;
+        public int WeaponValue { get; set; } = 0;
+        public int Potions { get; set; } = 0;
+
 
         public int Attack()
         {
-            if (WeaponValue<=0)
-            {
-                return Damage = rand.Next(20, 30);
-            }
-            else
-            {
-                return Damage = rand.Next(20, 30) * (weaponValue+1);
-            }
+            return rand.Next(20, 30) * (WeaponValue + 1);
         }
         public int GetGold()
         {
-            return rand.Next(30, 50)*Level;            
-        }       
+            return rand.Next(30, 50) * Level;
+        }
         public override string ToString()
         {
             return $"Name: {Name}\n" +
@@ -73,11 +68,11 @@ namespace TextBasedRpgProject
                 $"Gold: {Gold}\n" +
                 $"Potions {Potions}\n" +
                 $"Armor {ArmorValue}\n" +
-                $"Weapon {weaponValue}\n";
+                $"Weapon {WeaponValue}\n";
         }
         public int XpToLevel()
         {
-            return 100 * Level;
+            return 100 * Level +50;
         }
         public bool CanLevelUp()
         {
@@ -88,7 +83,7 @@ namespace TextBasedRpgProject
             else
             {
                 return false;
-            }     
+            }
         }
         public void LevelUp()
         {
@@ -105,23 +100,29 @@ namespace TextBasedRpgProject
         }
         public void MaxHpPlayer()
         {
-            maxHp = 200*Level;
+            MaxHp = 200 * Level;
             Hp = MaxHp;
         }
-        public void Heal(Player player)
+        public void Heal()
         {
-            if (player.potions == 0)
+            if (this.Potions == 0)
             {
                 Console.WriteLine("You dont have any potions");
-                Thread.Sleep(2000);          
+                Thread.Sleep(2000);
             }
             else
             {
-                hp = maxHp;
-                potions--;
-            }          
-                
+                hp = MaxHp;
+                Potions--;
+            }
+
         }
- 
+        private void EnableGodMode()
+        {
+            ArmorValue = 100;
+            WeaponValue = 100;
+            Potions = 20;            
+        }
+
     }
 }
