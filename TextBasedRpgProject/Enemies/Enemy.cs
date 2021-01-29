@@ -57,7 +57,7 @@ namespace TextBasedRpgProject.Enemies
         }
         public virtual int GiveXp()
         {
-            Xp = rand.Next(30, 50) * Level;
+            Xp = rand.Next(30, 50);
             return Xp;
         }
         public virtual void ShowChar()

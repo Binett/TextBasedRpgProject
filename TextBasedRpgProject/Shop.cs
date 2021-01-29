@@ -27,12 +27,12 @@ namespace TextBasedRpgProject
             {
                 Console.Clear();
                 Utilitys.ShopLogo();
-                Utilitys.PrintYellow("----------------------------");
-                Utilitys.PrintYellow(" 1. Weapon            $" + weaponPrice + " |");
-                Utilitys.PrintYellow(" 2. Armor             $" + armorPrice + " |");
-                Utilitys.PrintYellow(" 3. Potion            $" + PotionPrice + "  |");
-                Utilitys.PrintYellow(" 4. Go back to menu        |");
-                Utilitys.PrintYellow("----------------------------");
+                Utilitys.PrintYellow("---------------------------------");
+                Utilitys.PrintYellow(" 1. Strength          $" + weaponPrice + "\t|");
+                Utilitys.PrintYellow(" 2. Armor             $" + armorPrice + "\t|");
+                Utilitys.PrintYellow(" 3. Potion            $" + PotionPrice + "\t|");
+                Utilitys.PrintYellow(" 4. Go back to menu             |");
+                Utilitys.PrintYellow("---------------------------------");
                 Utilitys.PrintYellow(player.ToString());
                 char input = Console.ReadKey().KeyChar;
                 Console.WriteLine();
@@ -63,7 +63,7 @@ namespace TextBasedRpgProject
             {
                 if (item == '1')
                 {
-                    Utilitys.PrintGreen("Your weapon now becomes even more powerfull");
+                    Utilitys.PrintGreen("You now becomes even more powerfull");
                     Thread.Sleep(1500);
                     player.WeaponValue++;
                 }                    

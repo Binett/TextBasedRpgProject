@@ -63,12 +63,12 @@ namespace TextBasedRpgProject
         }
         public override string ToString()
         {
-            return $"Name: {Name}\n" +
-                $"Level: {Level}\n" +
-                $"Gold: {Gold}\n" +
-                $"Potions {Potions}\n" +
-                $"Armor {ArmorValue}\n" +
-                $"Weapon {WeaponValue}\n";
+            return $"Name:\t\t\t\t{Name}\n" +
+                $"Level:\t\t\t\t{Level}\n" +
+                $"Gold:\t\t\t\t{Gold}\n" +
+                $"Potions:\t\t\t{Potions}\n" +
+                $"Armor:\t\t\t\t{ArmorValue}\n" +
+                $"Strength:\t\t\t{WeaponValue}\n";
         }
         public int XpToLevel()
         {
@@ -122,7 +122,8 @@ namespace TextBasedRpgProject
             ArmorValue = 100;
             WeaponValue = 100;
             Potions = 20;
-            Level = 8;
+            Level = 9;
+            Gold = 100000;
         }
 
     }

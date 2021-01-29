@@ -178,7 +178,7 @@ namespace TextBasedRpgProject
         private void PlayerStats()
         {
             Utilitys.MainLogo();
-            Console.WriteLine(player.ToString());
+            Utilitys.PrintYellow(player.ToString());
             Console.WriteLine($"Your health\t\t\tHP:{player.Hp}/{player.MaxHp}");
             Utilitys.HealtBar(player, (decimal)player.Hp / (decimal)player.MaxHp, 40);
             Utilitys.ProgressBar(player, (decimal)player.Xp / (decimal)player.XpToLevel(), 40);
