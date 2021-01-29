@@ -9,9 +9,11 @@ namespace TextBasedRpgProject.Enemies
         protected Enemy(Player player)
         {
             this.player = player;
+            //generates name
             var names = new string[]
         {
-                "Torkel","Fasan","Glenn","Börje","Ostraus"
+                "Mantingamp","Minolpuemp","Yelpio","Suchnei","Sanavu","Wavern","Scoogriff","Bohan","Vrootc","Poadriuz","Kalphan",
+            "Heophan","Gnunae","Racander","Chialsum","Qossonan","Lolasum","Loretid","Zunulid","Kalipian"
         };
             var rand = new Random();
             var index = rand.Next(names.Length);
@@ -55,7 +57,7 @@ namespace TextBasedRpgProject.Enemies
         }
         public virtual int GiveXp()
         {
-            Xp = rand.Next(20, 50)*Level;
+            Xp = rand.Next(30, 50) * Level;
             return Xp;
         }
         public virtual void ShowChar()
@@ -63,8 +65,8 @@ namespace TextBasedRpgProject.Enemies
             Utilitys.LogoRandomEnemy();
         }
         public virtual void EnemyLevel()
-        {           
-            Level = player.Level;            
+        {
+            Level = player.Level;
         }
         public void MaxHpEnenmy()
         {

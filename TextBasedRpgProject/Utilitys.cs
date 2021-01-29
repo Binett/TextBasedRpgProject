@@ -5,16 +5,6 @@ namespace TextBasedRpgProject
 {
     static class Utilitys
     {
-        public static string RandomName()
-        {           
-            var names = new string[]
-            {
-                "Björn","Tobias","Daniel","Gruntosaur","Wille"
-            };
-            var rand = new Random();
-            var index = rand.Next(names.Length);
-            return names[index];
-        }
 
         /*|-----------------------------------------------------------------------------------------------------------------------------------------------------|
          *|------------------------------------------------------------> Print in green <-----------------------------------------------------------------------|

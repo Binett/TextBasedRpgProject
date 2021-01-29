@@ -121,7 +121,8 @@ namespace TextBasedRpgProject
         {
             ArmorValue = 100;
             WeaponValue = 100;
-            Potions = 20;            
+            Potions = 20;
+            Level = 8;
         }
 
     }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading;
+using System.Xml.XPath;
 using TextBasedRpgProject.Enemies;
 
 
@@ -64,7 +65,13 @@ namespace TextBasedRpgProject
             int fightOrFlee = rand.Next(1, 10);
             if (fightOrFlee == 1)
             {
-                Console.WriteLine("You see nothing but trees, but you gaines some experience");
+                Utilitys.PrintGreen("You see nothing but trees, but you gaines 30 experience");
+                player.Xp += 30;
+                if (player.CanLevelUp())
+                {                    
+                    player.LevelUp();
+                    player.MaxHpPlayer();
+                }
             }
             else
             {
