@@ -22,7 +22,8 @@ namespace TextBasedRpgProject
                 PotionPrice = 20 + 20 * player.Level;
                 armorPrice = 100 * (player.ArmorValue + 1);
                 weaponPrice = 100 * (player.WeaponValue+1);
-            while (true)
+            bool menu=true;
+            while (menu)
             {
                 Console.Clear();
                 Utilitys.ShopLogo();
@@ -34,6 +35,7 @@ namespace TextBasedRpgProject
                 Utilitys.PrintYellow("----------------------------");
                 Utilitys.PrintYellow(player.ToString());
                 char input = Console.ReadKey().KeyChar;
+                Console.WriteLine();
                 switch (input)
                 {
                     case '1':
@@ -46,8 +48,9 @@ namespace TextBasedRpgProject
                         TryBuy('3', PotionPrice, player);
                         break;
                     case '4':
+                        menu = false;
                         Console.Clear();
-                        return;                     
+                        break;                  
 
                 }
                 
@@ -61,19 +64,19 @@ namespace TextBasedRpgProject
                 if (item == '1')
                 {
                     Utilitys.PrintGreen("Your weapon now becomes even more powerfull");
-                    Console.ReadKey();
+                    Thread.Sleep(1500);
                     player.WeaponValue++;
                 }                    
                 else if (item == '2')
                 {
                     Utilitys.PrintGreen("You gain some armor :)");
-                    Console.ReadKey();
+                    Thread.Sleep(1500);
                     player.ArmorValue++;
                 }                    
                 else if (item == '3')
                 {
                     Utilitys.PrintGreen($"You bought a potion ");
-                    Console.ReadKey();
+                    Thread.Sleep(1500);
                     player.Potions++;
                 }
                 player.Gold-= cost;
@@ -81,7 +84,7 @@ namespace TextBasedRpgProject
             else
             {
                 Utilitys.PrintRed("You dont have enough gold");
-                Console.ReadKey();
+                Thread.Sleep(1500);
             }
         }
 

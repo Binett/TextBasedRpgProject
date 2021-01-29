@@ -19,7 +19,7 @@ namespace TextBasedRpgProject
             }
             set
             {
-                if (value == "robin")
+                if (value == "Robin".ToLower()||value == "Kakashi".ToLower())
                 {
                     EnableGodMode();
                 }
