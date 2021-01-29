@@ -16,7 +16,6 @@ namespace TextBasedRpgProject.Enemies
         {
             return base.Attack()+5;
         }
-
         public override void ShowChar()
         {
             Utilitys.LogoVampire();

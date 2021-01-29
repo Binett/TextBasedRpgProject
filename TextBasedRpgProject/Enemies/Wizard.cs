@@ -15,7 +15,6 @@ namespace TextBasedRpgProject.Enemies
         {
             return base.Attack() + 10;
         }
-
         public override void ShowChar()
         {
             Utilitys.LogoWizard();
